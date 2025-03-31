@@ -13,6 +13,8 @@ dependencies:
 
   cupertino_icons: ^1.0.8
   google_fonts: ^6.1.0  # Corrected the dependency name
+  firebase_core: ^3.12.1
+  firebase_auth: ^5.5.1
 
 dev_dependencies:
   flutter_test:
@@ -24,6 +26,24 @@ flutter:
   uses-material-design: true
 
   assets:
-    - lib/assets/Fashion.jpg 
-    - lib/assets/google.jpg # Fixed indentation
+    - lib/assets/Fashion.jpg
+    - lib/assets/google.jpg
     - lib/assets/bodytype.jpg
+    - lib/assets/Apple.png
+    - lib/assets/Pear.png
+    - lib/assets/Rectangle.png
+    - lib/assets/Hourglass.png
+    - lib/assets/Inverted_Triangle.png
+    - lib/assets/hourglassdresses.jpg
+    - lib/assets/hourglasstops.jpg
+    - lib/assets/hourglassjeans.jpg
+    - lib/assets/peartops.jpg
+    - lib/assets/pearjeans.jpg
+    - lib/assets/peardresses.jpg
+    - lib/assets/appledresses.jpg
+    - lib/assets/applejeans.jpg
+    - lib/assets/newappletops.jpg
+    - lib/assets/newappletops2.jpg
+    - lib/assets/rectangletops.jpg
+    - lib/assets/rectangledresses.jpg
+    - lib/assets/rectanglejeans.jpg

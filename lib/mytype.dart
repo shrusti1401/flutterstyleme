@@ -1,132 +1,125 @@
 import 'package:flutter/material.dart';
+import 'quizresults.dart';
 
-class BodyMeasurementForm extends StatefulWidget {
-  @override
-  _BodyMeasurementFormState createState() => _BodyMeasurementFormState();
+void main() {
+  runApp(BodyTypeQuizApp());
 }
 
-class _BodyMeasurementFormState extends State<BodyMeasurementForm> {
-  final _formKey = GlobalKey<FormState>();
-  final chestController = TextEditingController();
-  final waistController = TextEditingController();
-  final hipController = TextEditingController();
+class BodyTypeQuizApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.dark(),
+      home: BodyTypeQuizPage(),
+    );
+  }
+}
 
-  String? bodyShape;
+class BodyTypeQuizPage extends StatefulWidget {
+  @override
+  _BodyTypeQuizPageState createState() => _BodyTypeQuizPageState();
+}
 
-  void calculateBodyShape() {
-    double chest = double.tryParse(chestController.text) ?? 0.0;
-    double waist = double.tryParse(waistController.text) ?? 0.0;
-    double hip = double.tryParse(hipController.text) ?? 0.0;
+class _BodyTypeQuizPageState extends State<BodyTypeQuizPage> {
+  int _selectedOption = -1;
+  int _currentQuestion = 0;
 
-    setState(() {
-      if (waist < chest && waist < hip) {
-        if (chest > hip) {
-          bodyShape = 'Inverted Triangle';
-        } else if (chest < hip) {
-          bodyShape = 'Pear';
-        } else {
-          bodyShape = 'Hourglass';
-        }
-      } else if (chest == waist && waist == hip) {
-        bodyShape = 'Rectangle';
-      } else if (waist > chest && waist > hip) {
-        bodyShape = 'Apple';
-      } else {
-        bodyShape = 'Unknown';
-      }
-    });
+  List<String> questions = [
+    "How would you describe your shoulders?",
+    "What best describes your waistline?",
+    "How do your hips compare to your shoulders?"
+  ];
+
+  List<List<String>> options = [
+    ["Narrow", "Medium", "Broad"],
+    ["Defined", "Slightly Defined", "Not Defined"],
+    ["Narrower", "Same Width", "Wider"]
+  ];
+
+  List<String> bodyTypes = ["Inverted Triangle", "Rectangle", "Hourglass", "Pear", "Apple"];
+
+  Map<String, String> bodyTypeDescriptions = {
+    "Inverted Triangle": "Your shoulders are broader than your hips, giving you a strong upper body look.",
+    "Rectangle": "Your shoulders, waist, and hips are nearly the same width, creating a straight silhouette.",
+    "Hourglass": "Your shoulders and hips are well-balanced with a defined waistline, creating an hourglass shape.",
+    "Pear": "Your hips are wider than your shoulders, creating a pear-shaped silhouette.",
+    "Apple": "Your midsection is fuller compared to your shoulders and hips, resulting in an apple-shaped look."
+  };
+
+  void _nextQuestion() {
+    if (_currentQuestion < questions.length - 1) {
+      setState(() {
+        _currentQuestion++;
+        _selectedOption = -1;
+      });
+    } else {
+      // Define body types and their corresponding images
+      Map<String, String> bodyTypeImages = {
+        "Hourglass": 'lib/assets/Hourglass.png',
+        "Pear": 'lib/assets/Pear.png',
+        "Apple": 'lib/assets/Apple.png',
+        "Rectangle": 'lib/assets/Rectangle.png',
+        "Inverted Triangle": 'lib/assets/Inverted_Triangle.png',
+      };
+
+      // Determine the result based on selected options (adjust logic as needed)
+      String bodyType = bodyTypes[_selectedOption % bodyTypes.length];
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => QuizResultPage(
+            bodyType: bodyType,
+            description: bodyTypeDescriptions[bodyType]!,
+            imagePath: bodyTypeImages[bodyType]!,
+          ),
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Body Type Calculator'),
-        backgroundColor: Colors.blueAccent,
+        title: Text("Body Type Quiz"),
+        backgroundColor: Colors.black,
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+      backgroundColor: Colors.black,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset(
-              'lib/assets/bodytype.jpg',
-              height: 200,
-              fit: BoxFit.cover,
-            ),
-            SizedBox(height: 20),
             Text(
-              'Enter Your Measurements',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 10),
-            Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  TextFormField(
-                    controller: chestController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: 'Chest (cm)',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) => value!.isEmpty ? 'Enter chest size' : null,
-                  ),
-                  SizedBox(height: 10),
-                  TextFormField(
-                    controller: waistController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: 'Waist (cm)',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) => value!.isEmpty ? 'Enter waist size' : null,
-                  ),
-                  SizedBox(height: 10),
-                  TextFormField(
-                    controller: hipController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      labelText: 'Hip (cm)',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (value) => value!.isEmpty ? 'Enter hip size' : null,
-                  ),
-                ],
-              ),
+              questions[_currentQuestion],
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
             ),
             SizedBox(height: 20),
+            ...List.generate(options[_currentQuestion].length, (index) {
+              return RadioListTile(
+                title: Text(options[_currentQuestion][index], style: TextStyle(color: Colors.white)),
+                value: index,
+                groupValue: _selectedOption,
+                onChanged: (value) {
+                  setState(() {
+                    _selectedOption = value as int;
+                  });
+                },
+                activeColor: Colors.purpleAccent,
+              );
+            }),
+            Spacer(),
             ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  calculateBodyShape();
-                }
-              },
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 15),
-                backgroundColor: Colors.blueAccent,
+                backgroundColor: Colors.purpleAccent,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
               ),
-              child: Text(
-                'Calculate Body Shape',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
+              onPressed: _selectedOption == -1 ? null : _nextQuestion,
+              child: Text("Next", style: TextStyle(fontSize: 18, color: Colors.black)),
             ),
-            SizedBox(height: 20),
-            if (bodyShape != null)
-              Container(
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.blueAccent.shade100,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Text(
-                  'Your Body Shape: $bodyShape',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
-                  textAlign: TextAlign.center,
-                ),
-              ),
           ],
         ),
       ),

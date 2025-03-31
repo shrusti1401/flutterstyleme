@@ -1,22 +1,9 @@
+// login.dart
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:styleme/Create.dart';
-import 'WelcomePage.dart'; // Import WelcomePage
-import 'package:styleme/mytype.dart';
+import 'WelcomePage.dart'; 
 import 'package:flutter/gestures.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: LoginPage(),
-    );
-  }
-}
 
 class LoginPage extends StatefulWidget {
   @override
@@ -24,21 +11,26 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  void _login() {
-    String username = _usernameController.text;
-    String password = _passwordController.text;
+  void _login() async {
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
 
-    if (username == 'shrusti' && password == '123') {
+    try {
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => WelcomePage()),
       );
-    } else {
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Invalid Username or Password')),
+        SnackBar(content: Text('Login failed: ${e.toString()}')),
       );
     }
   }
@@ -48,7 +40,6 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Row(
         children: [
-          // Left Side - Illustration with Background Image
           Expanded(
             child: Container(
               decoration: BoxDecoration(
@@ -59,8 +50,6 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
-          
-          // Right Side - Login Form
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(32.0),
@@ -68,23 +57,16 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'StyleMe',
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  Text('StyleMe',
+                      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
                   SizedBox(height: 10),
-                  Text(
-                    'Welcome to StyleMe',
-                    style: TextStyle(fontSize: 18, color: Colors.grey),
-                  ),
+                  Text('Welcome to StyleMe',
+                      style: TextStyle(fontSize: 18, color: Colors.grey)),
                   SizedBox(height: 30),
                   TextField(
-                    controller: _usernameController,
+                    controller: _emailController,
                     decoration: InputDecoration(
-                      labelText: 'Username or Email',
+                      labelText: 'Email',
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -113,10 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                         padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                         backgroundColor: Colors.black,
                       ),
-                      child: Text(
-                        'Sign in',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                      child: Text('Sign in', style: TextStyle(color: Colors.white)),
                     ),
                   ),
                   SizedBox(height: 20),
@@ -145,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                   Center(
                     child: Text.rich(
                       TextSpan(
-                        text: 'New to StyleMe ? ',
+                        text: 'New to StyleMe? ',
                         children: [
                           TextSpan(
                             text: 'Create Account',

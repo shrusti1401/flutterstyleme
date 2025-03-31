@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:styleme/mytype.dart'; // Import mytype.dart
+import 'package:styleme/mytype.dart';
 
 class WardrobePage extends StatelessWidget {
   @override
@@ -8,116 +8,54 @@ class WardrobePage extends StatelessWidget {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Row(
-          children: [
-            CircleAvatar(
-              backgroundColor: Colors.grey,
-              child: Icon(Icons.person, color: Colors.white),
-            ),
-            SizedBox(width: 10),
-            Text("shrusti", style: TextStyle(color: Colors.white)),
-            Icon(Icons.arrow_drop_down, color: Colors.white),
-            Spacer(),
-            Icon(Icons.diamond, color: Colors.blueAccent),
-            SizedBox(width: 15),
-            Icon(Icons.notifications, color: Colors.white),
-          ],
+        title: Center(
+          child: Text("Wardrobe Dashboard", style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
+      body: Center(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Row(
-              children: [
-                Text("WARDROBE", style: TextStyle(color: Colors.white, fontSize: 20)),
-                SizedBox(width: 20),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => BodyMeasurementForm()), // Navigate to mytype.dart
-                    );
-                  },
-                  child: Text(
-                    "bodytype",
-                    style: TextStyle(color: Colors.white54, fontSize: 18, decoration: TextDecoration.underline),
-                  ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => BodyTypeQuizApp()),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.pinkAccent,
+                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                SizedBox(width: 20),
-                Text("SHOPPING", style: TextStyle(color: Colors.white54, fontSize: 18)),
-              ],
+              ),
+              child: Text("Find Your Body Type", style: TextStyle(fontSize: 18, color: Colors.white)),
+            ),
+            SizedBox(height: 50),
+            Text(
+              "Welcome to StyleMe",
+              style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
-            Container(
-              padding: EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.orange, Colors.green],
-                ),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Bulk add", style: TextStyle(color: Colors.white, fontSize: 20)),
-                      Text("Try the bulk add feature to add multiple items.", style: TextStyle(color: Colors.white70)),
-                    ],
-                  ),
-                  Icon(Icons.checkroom, color: Colors.white, size: 40),
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.grey.shade900,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              padding: EdgeInsets.all(10),
-              child: Row(
-                children: [
-                  Text("Clothes", style: TextStyle(color: Colors.white)),
-                  SizedBox(width: 20),
-                  Text("Outfits", style: TextStyle(color: Colors.white54)),
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
-            Center(
-              child: Column(
-                children: [
-                  Container(
-                    height: 150,
-                    width: 150,
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Text("2\nclothing items", textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 20)),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text("Tops", style: TextStyle(color: Colors.white, fontSize: 18)),
-                ],
-              ),
+            Text(
+              "Enhance your style with personalized recommendations",
+              style: TextStyle(color: Colors.white54, fontSize: 16),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.black,
+        type: BottomNavigationBarType.fixed,
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.dashboard, color: Colors.white), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.checkroom, color: Colors.white), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.dashboard, color: Colors.white), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.checkroom, color: Colors.white), label: 'Wardrobe'),
           BottomNavigationBarItem(icon: Icon(Icons.add_circle, color: Colors.blueAccent, size: 40), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.style, color: Colors.white), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.public, color: Colors.white), label: ''),
+          BottomNavigationBarItem(icon: Icon(Icons.style, color: Colors.white), label: 'Style'),
+          BottomNavigationBarItem(icon: Icon(Icons.public, color: Colors.white), label: 'Explore'),
         ],
       ),
     );
